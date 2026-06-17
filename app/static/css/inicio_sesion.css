@@ -1,0 +1,204 @@
+/* ==========================================================================
+   VARIABLES COMPARTIDAS (Idénticas al Dashboard)
+   ========================================================================== */
+:root {
+    --bg-app: #f9fafb;         /* Fondo gris súper claro */
+    --bg-card: #ffffff;        /* Blanco puro para tarjetas */
+    --text-main: #111827;      /* Texto principal oscuro */
+    --text-muted: #6b7280;     /* Texto secundario gris */
+    --accent: #235336;         /* Verde oscuro principal */
+    --accent-hover: #1b422a;   /* Verde oscuro para hover */
+    --border-color: #e5e7eb;   /* Bordes de inputs */
+    --radius-input: 8px;
+    --radius-card: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.auth-body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   CONTENEDORES PRINCIPALES
+   ========================================================================== */
+.auth-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: var(--text-main);
+}
+
+.auth-card {
+    background-color: var(--bg-card);
+    width: 100%;
+    padding: 40px 32px;
+    border-radius: var(--radius-card);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
+}
+
+.auth-header {
+    text-align: left;
+    margin-bottom: 28px;
+}
+
+.auth-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+.auth-header p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   FORMULARIO E INPUTS
+   ========================================================================== */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.grupo-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-input);
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    background-color: var(--bg-card);
+    transition: all 0.2s ease;
+}
+
+input::placeholder {
+    color: #9ca3af;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(35, 83, 54, 0.1);
+}
+
+/* ==========================================================================
+   BOTONES Y ENLACES
+   ========================================================================== */
+.btn-primario {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-input);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.2s ease;
+    font-family: inherit;
+}
+
+.btn-primario:hover {
+    background-color: var(--accent-hover);
+}
+
+.auth-footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   ALERTAS
+   ========================================================================== */
+.contenedor-alertas {
+    margin-bottom: 20px;
+}
+
+.alerta {
+    padding: 12px;
+    border-radius: var(--radius-input);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.alerta.error {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
+.alerta.success {
+    background-color: #f0fdf4;
+    color: #166534;
+
+/* ==========================================================================
+   DISEÑO RESPONSIVO (MÓVILES)
+   ========================================================================== */
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 32px 20px;
+    }
+    
+    .auth-header h2 {
+        font-size: 1.3rem;
+    }
+}
+    border: 1px solid #86efac;
+}

@@ -1,0 +1,50 @@
+<!-- ================= MODAL NUEVO HÁBITO ================= -->
+<div id="modalNuevoHabito" class="modal-overlay">
+    <!-- CONTENEDOR DEL FORMULARIO MODAL -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Crear nuevo hábito</h2>
+            <!-- Botón de la X para cerrar -->
+            <button class="btn-close-modal" id="cerrarModal" aria-label="Cerrar">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <!-- Usamos url_for apuntando al blueprint 'habito' y la función 'crear' -->
+        <form action="{{ url_for('habitos.crear') }}"
+              method="POST"
+              class="modal-form">
+            <div class="grupo-form">
+                <label for="nombre_habito">Nombre del hábito</label>
+                <input type="text"
+                       id="nombre_habito"
+                       name="nombre"
+                       placeholder="Ej. Leer 20 páginas, Meditar..."
+                       required>
+            </div>
+            <div class="grupo-form">
+                <label for="descripcion_habito">Descripción del hábito</label>
+                <input type="text"
+                       id="descripcion_habito"
+                       name="descripcion"
+                       placeholder="¿Para que sirve el hábito?">
+            </div>
+            <div class="grupo-form">
+                <label>Días de la semana</label>
+                <!-- Selector de días con estilo de botones circulares -->
+                <div class="dias-semana">
+                    {% for dia in ['L', 'M', 'X', 'J', 'V', 'S', 'D'] %}
+                    <label class="dia-pill">
+                        <input type="checkbox" name="dias" value="{{ dia }}">
+                        <span>{{ dia }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline" id="cancelarModal">Cancelar</button>
+                <button type="submit" class="btn-outline btn-accent" style="width: 100%;">Guardar hábito</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ================= FIN MODAL ================= -->

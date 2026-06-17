@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar Hábito | Hábito.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/pagina_principal.css') }}">
+    </head>
+    <body>
+        <div class="app-layout">
+            <aside class="sidebar">
+                <div class="sidebar-top">
+                    <div class="brand-logo">
+                        <span class="logo-icon">🌿</span>
+                        <span class="logo-text">Hábito.</span>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <a href="{{ url_for("pag_principal.inicio") }}" class="nav-item"><i data-lucide="home"></i> Resumen</a>
+                        <a href="{{ url_for("habitos.mis_habitos") }}" class="nav-item active"><i data-lucide="check-square"></i> Hábitos</a>
+                    </nav>
+                </div>
+                <div class="sidebar-bottom">
+                    <div class="user-profile">
+                        <div class="avatar">
+                            <div class="avatar-circle">{{ usuario.nombre_usuario[0] | upper if usuario.nombre_usuario else 'U' }}</div>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">{{ usuario.nombre_usuario }}</span>
+                            <a href="{{ url_for("auth.cerrar_sesion") }}" class="link-logout">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="page-header" style="margin-bottom: 20px;">
+                    <div>
+                        <h1>Editar Hábito</h1>
+                        <p class="subtitle">Modifica la información de tu rutina</p>
+                    </div>
+                </header>
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% if mensajes %}
+                        <div class="contenedor-alertas" style="margin-bottom: 20px;">
+                            {% for categoria, mensaje in mensajes %}<div class="alerta {{ categoria }}">{{ mensaje }}</div>{% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <section class="card" style="max-width: 600px;">
+                    <!-- Fíjate cómo el action apunta a la misma ruta pero le envía el ID -->
+                    <form action="{{ url_for('habitos.editar', id_habito=habito.id) }}"
+                          method="POST"
+                          class="modal-form">
+                        <div class="grupo-form">
+                            <label for="nombre">Nombre del hábito</label>
+                            <input type="text"
+                                   id="nombre"
+                                   name="nombre"
+                                   value="{{ habito.nombre }}"
+                                   required>
+                        </div>
+                        <div class="grupo-form">
+                            <label for="descripcion">Descripción</label>
+                            <input type="text"
+                                   id="descripcion"
+                                   name="descripcion"
+                                   value="{{ habito.descripcion or '' }}">
+                        </div>
+                        <div class="grupo-form">
+                            <label>Días de la semana</label>
+                            <div class="dias-semana">
+                                {% for dia in ['L', 'M', 'X', 'J', 'V', 'S', 'D'] %}
+                                    <label class="dia-pill">
+                                        <input type="checkbox"
+                                               name="dias"
+                                               value="{{ dia }}"
+                                               {% if dia in habito.dias_semana %}checked{% endif %}>
+                                        <span>{{ dia }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="grupo-form"
+                             style="flex-direction: row;
+                                    align-items: center;
+                                    gap: 10px;
+                                    margin-top: 10px">
+                            <input type="checkbox"
+                                   id="activo"
+                                   name="activo"
+                                   {% if habito.activo %}checked{% endif %}
+                                   style="width: auto">
+                            <label for="activo" style="margin: 0;">Mantener hábito activo</label>
+                        </div>
+                        <div class="modal-actions" style="margin-top: 30px;">
+                            <a href="{{ url_for("habitos.mis_habitos") }}"
+                               class="btn-outline"
+                               style="text-decoration: none;
+                                      width: 100%;
+                                      text-align: center">Cancelar</a>
+                            <button type="submit" class="btn-outline btn-accent" style="width: 100%;">Guardar cambios</button>
+                        </div>
+                    </form>
+                </section>
+            </main>
+        </div>
+        <script>lucide.createIcons();</script>
+    </body>
+</html>

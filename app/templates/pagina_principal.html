@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resumen | Hábito.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/pagina_principal.css') }}">
+        <!--        ICONOS-->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+        <!--        MODAL PARA NUEVO HÁBITO-->
+        <script src="{{ url_for('static', filename='js/modals.js') }}"></script>
+    </head>
+    <body>
+        <div class="app-layout">
+            <!-- Invocamos nuestra barra lateral reutilizable -->
+            {% include 'sidebar.html' %}
+            <!-- Parte principal y central de la pantalla            -->
+            <main class="main-content">
+                <header class="page-header">
+                    <div>
+                        <h1>Resumen</h1>
+                        <p class="subtitle">Así van tus hábitos</p>
+                    </div>
+                </header>
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% if mensajes %}
+                        <div class="contenedor-alertas" style="margin-bottom: 20px;">
+                            {% for categoria, mensaje in mensajes %}
+                                <div class="alerta {{ categoria }}"
+                                     style="padding: 12px;
+                                            border-radius: 8px;
+                                            margin-bottom: 10px;
+                                            background-color: {% if categoria == 'success' %}#f0fdf4{% else %}#fef2f2{% endif %};
+                                            color: {% if categoria == 'success' %}#166534{% else %}#991b1b{% endif %};
+                                            border: 1px solid {% if categoria == 'success' %}#86efac{% else %}#f87171{% endif %}">
+                                    {{ mensaje }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <!-- KPIS (RACHA ACTUAL, HÁBITOS COMPLETADOS, MEJOR RACHA-->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-label">Racha actual</span>
+                        <div class="kpi-value-row">
+                            <h2>{{ racha_actual }}</h2>
+                            <span>días</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Hábitos completados</span>
+                        <div class="kpi-value-row">
+                            <h2>{{ habitos_completados_hoy }}</h2>
+                            <span>hoy</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Mejor racha</span>
+                        <div class="kpi-value-row">
+                            <h2>{{ mejor_racha }}</h2>
+                            <span>días</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- CONTENIDO CENTRAL EN 2 COLUMNAS (HÁBITOS Y CALENDARIO)               -->
+                <div class="dashboard-grid">
+                    <!-- HÁBITOS                   -->
+                    <section class="card habits-section">
+                        <div class="section-header">
+                            <h3>Tus hábitos de hoy</h3>
+                            <div class="header-labels">
+                                <span>Racha</span>
+                                <span>Progreso</span>
+                            </div>
+                        </div>
+                        <!-- Lista de hábitos                        -->
+                        <div class="habits-list">
+                            {% if habitos %}
+                                {% for habito in habitos %}
+                                    <div class="habit-item {% if habito.completado_hoy %}completado{% endif %}">
+                                        <div class="habit-main">
+                                            <div class="habit-icon">🎯</div>
+                                            <div class="habit-text">
+                                                <h4 style="{% if habito.completado_hoy %}text-decoration: line-through;
+                                                           color: #9ca3af;
+                                                           {% endif %}">{{ habito.nombre }}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="habit-streak">🔥 {{ habito.racha_actual | default(0) }} días</div>
+                                        <div class="habit-action"
+                                             style="display: flex;
+                                                    gap: 8px;
+                                                    align-items: center">
+                                            <!-- Enlace directo a las estadísticas -->
+                                            <a href="{{ url_for('habitos.visualizar_progreso', id_habito=habito.id) }}"
+                                               class="btn-outline"
+                                               title="Visualizar progreso"
+                                               style="padding: 6px 10px;
+                                                      text-decoration: none;
+                                                      color: var(--text-main)">
+                                                <i data-lucide="line-chart" style="width: 18px; height: 18px;"></i>
+                                            </a>
+                                            <!-- Formulario seguro para completar -->
+                                            <form action="{{ url_for('habitos.completar', id_habito=habito.id) }}"
+                                                  method="POST"
+                                                  style="margin: 0">
+                                                {% if habito.completado_hoy %}
+                                                    <button type="submit"
+                                                            class="btn-outline"
+                                                            style="padding: 6px 12px;
+                                                                   font-size: 0.85rem">Deshacer</button>
+                                                {% else %}
+                                                    <button type="submit"
+                                                            class="btn-outline"
+                                                            style="padding: 6px 12px;
+                                                                   font-size: 0.85rem;
+                                                                   background: var(--accent);
+                                                                   color: white">Completar ✓</button>
+                                                {% endif %}
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div style="text-align: center; padding: 40px; color: #6b7280;">
+                                    <p>No tienes hábitos programados para el día de hoy. ¡Disfruta tu día!</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button class="btn-add-habit">
+                            <i data-lucide="plus"></i> Nuevo hábito
+                        </button>
+                    </section>
+                    <!-- CALENDARIO                    -->
+                    <aside class="dashboard-sidebar">
+                        <div class="card calendar-card">
+                            <div class="card-header">
+                                <h3>Calendario: {{ mes_actual }}</h3>
+                            </div>
+                            <div class="calendar-grid" style="margin-top: 15px;">
+                                <span class="day-label">L</span>
+                                <span class="day-label">M</span>
+                                <span class="day-label">X</span>
+                                <span class="day-label">J</span>
+                                <span class="day-label">V</span>
+                                <span class="day-label">S</span>
+                                <span class="day-label">D</span>
+                                <!-- Espacios vacíos antes de que empiece el mes -->
+                                {% for i in range(dia_semana_inicio) %}<div class="cal-day empty"></div>{% endfor %}
+                                <!-- Días reales del mes -->
+                                {% for dia in range(1, num_dias + 1) %}
+                                    <div class="cal-day {% if dia in dias_completados %}completed{% endif %}">{{ dia }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+                <!-- Invocamos nuestro componente de modal reutilizable -->
+                {% include 'modal_nuevo_habito.html' %}
+
+                <!-- FOOTER -->
+                <footer class="main-footer">
+                    <p>&copy; 2026 Brandon Omar Castillo Valencia. Todos los derechos reservados.</p>
+                    <a href="mailto:brandoncv09@gmail.com" class="footer-link">
+                        <i data-lucide="mail"></i> brandoncv09@gmail.com
+                    </a>
+                </footer>
+            </main>
+        </div>
+        <script>lucide.createIcons();</script>
+    </body>
+</html>

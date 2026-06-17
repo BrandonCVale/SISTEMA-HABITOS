@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mis Hábitos | Hábito.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/pagina_principal.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/habitos.css') }}">
+    </head>
+    <body>
+        <div class="app-layout">
+            <!--Columna fija a la izquierda de la pantalla-->
+            <aside class="sidebar">
+                <div class="sidebar-top">
+                    <div class="brand-logo">
+                        <span class="logo-icon">🌿</span>
+                        <span class="logo-text">Hábito.</span>
+                    </div>
+                    <!--                    pestanas de navegación-->
+                    <nav class="sidebar-nav">
+                        <a href="{{ url_for("pag_principal.inicio") }}" class="nav-item"><i data-lucide="home"></i> Resumen</a>
+                        <a href="#" class="nav-item active"><i data-lucide="check-square"></i> Hábitos</a>
+                    </nav>
+                </div>
+                <div class="sidebar-bottom">
+                    <div class="user-profile">
+                        <div class="avatar">
+                            <div class="avatar-circle">{{ usuario.nombre_usuario[0] | upper if usuario.nombre_usuario else 'U' }}</div>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">{{ usuario.nombre_usuario | default("Usuario") }}</span>
+                            <a href="{{ url_for("auth.cerrar_sesion") }}" class="link-logout">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <!--            Parte principal y central de la pantalla -->
+            <main class="main-content">
+                <header class="page-header" style="align-items: center;">
+                    <div>
+                        <h1>Mis Hábitos</h1>
+                        <p class="subtitle">Administra y edita tus rutinas</p>
+                    </div>
+                    <button class="btn-outline btn-accent btn-add-habit"
+                            style="width: auto;
+                                   margin-top: 0">
+                        <i data-lucide="plus"></i> Nuevo hábito
+                    </button>
+                </header>
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% if mensajes %}
+                        <div class="contenedor-alertas">
+                            {% for categoria, mensaje in mensajes %}<div class="alerta {{ categoria }}">{{ mensaje }}</div>{% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <!--                FILTRO EN LA URL-->
+                <div class="management-filters">
+                    <!-- Pasamos el parámetro 'estado' en el url_for. Flask lo agregará a la URL automáticamente -->
+                    <a href="{{ url_for('habitos.mis_habitos', estado='activos') }}"
+                       class="filter-btn {% if estado_actual == 'activos' %}active{% endif %}"
+                       style="text-decoration: none">Activos</a>
+                    <a href="{{ url_for('habitos.mis_habitos', estado='inactivos') }}"
+                       class="filter-btn {% if estado_actual == 'inactivos' %}active{% endif %}"
+                       style="text-decoration: none">Inactivos</a>
+                    <a href="{{ url_for('habitos.mis_habitos', estado='todos') }}"
+                       class="filter-btn {% if estado_actual == 'todos' %}active{% endif %}"
+                       style="text-decoration: none">Todos</a>
+                </div>
+                <div class="habits-management-grid">
+                    {% if habitos %}
+                        {% for habito in habitos %}
+                            <div class="management-card">
+                                <div class="management-card-header">
+                                    <div class="m-habit-title">
+                                        <div class="habit-icon">🎯</div>
+                                        <div>
+                                            <h3>{{ habito.nombre }}</h3>
+                                        </div>
+                                    </div>
+                                    <!--                                    ACCIONES (EDITAR, ELIMINAR, VISUALIZAR)-->
+                                    <!--                                    EDITAR-->
+                                    <div class="m-habit-actions">
+                                        <a href="{{ url_for('habitos.editar', id_habito=habito.id) }}"
+                                           class="icon-btn edit-btn"
+                                           title="Editar"
+                                           style="text-decoration: none;
+                                                  color: inherit;
+                                                  display: flex;
+                                                  align-items: center;
+                                                  gap: 4px">
+                                            <i data-lucide="edit-2"></i>
+                                        </a>
+                                        <!--                                        VISUALIZAR-->
+                                        <a href="{{ url_for('habitos.visualizar_progreso', id_habito=habito.id) }}"
+                                           class="icon-btn view-btn"
+                                           title="Visualizar"
+                                           style="text-decoration: none;
+                                                  color: inherit;
+                                                  display: flex;
+                                                  align-items: center">
+                                            <i data-lucide="chart-no-axes-combined"></i>
+                                        </a>
+                                        <!--                                        ELIMINAR-->
+                                        <form action="{{ url_for('habitos.eliminar', id_habito=habito.id) }}"
+                                              method="POST"
+                                              style="margin: 0;
+                                                     display: inline-flex"
+                                              onsubmit="return confirm('¿Estás seguro de que deseas eliminar el hábito \'{{ habito.nombre }}\'? Esta acción no se puede deshacer.');">
+                                            <button type="submit"
+                                                    class="icon-btn trash-btn"
+                                                    title="Eliminar"
+                                                    style="background: none;
+                                                           border: none;
+                                                           padding: 0;
+                                                           color: inherit;
+                                                           display: flex;
+                                                           align-items: center;
+                                                           cursor: pointer">
+                                                <i data-lucide="trash-2"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!--                                Pintar los días seleccionados conforme a la bd-->
+                                <div class="management-card-body">
+                                    <div class="freq-display">
+                                        {% set dias_totales = ["L", "M", "X", "J", "V", "S", "D"] %}
+                                        {% for dia in dias_totales %}
+                                            {% if dia in habito.dias_semana %}
+                                                <span class="freq-pill active">{{ dia }}</span>
+                                            {% else %}
+                                                <span class="freq-pill inactive">{{ dia }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!--                                Pintar los datos de las rechas desde la BD-->
+                                <div class="management-card-footer">
+                                    <div class="stat-mini">
+                                        <span class="stat-label">Racha Actual</span>
+                                        <span class="stat-value">🔥 {{ habito.racha_actual | default(0) }}</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-label">Mejor Racha</span>
+                                        <span class="stat-value">🏆 {{ habito.mejor_racha | default(0) }}</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-label">Creado el</span>
+                                        <span class="stat-value">📅 {{ habito.fecha_creacion.strftime("%d/%m/%Y") if habito.fecha_creacion else 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <p>No tienes hábitos registrados. ¡Crea el primero!</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Invocamos nuestro componente de modal reutilizable -->
+                {% include 'modal_nuevo_habito.html' %}
+                <footer class="main-footer">
+                    <p>&copy; 2026 Brandon Omar Castillo Valencia. Todos los derechos reservados.</p>
+                    <a href="mailto:brandoncv09@gmail.com" class="footer-link">
+                        <i data-lucide="mail"></i> brandoncv09@gmail.com
+                    </a>
+                </footer>
+            </main>
+        </div>
+        <script>lucide.createIcons();</script>
+        <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/modals.js') }}"></script>
+    </body>
+</html>

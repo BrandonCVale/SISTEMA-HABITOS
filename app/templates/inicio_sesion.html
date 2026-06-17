@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Iniciar Sesión | Hábito.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/inicio_sesion.css') }}">
+        <script src="{{ url_for('static', filename='js/alertas.js') }}"></script>
+    </head>
+    <body class="auth-body">
+        <div class="auth-wrapper">
+            <div class="brand-logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">Hábito.</span>
+            </div>
+            <main class="auth-card">
+                <div class="auth-header">
+                    <h2>Iniciar Sesión</h2>
+                    <p>Ingresa a tu cuenta para continuar.</p>
+                </div>
+                {# --- BLOQUE DE ALERTAS JINJA --- #}
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% if mensajes %}
+                        <div class="contenedor-alertas">
+                            {% for categoria, mensaje in mensajes %}<div class="alerta {{ categoria }}">{{ mensaje }}</div>{% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                {# --- FIN BLOQUE DE ALERTAS --- #}
+                <form method="POST" action="" class="auth-form">
+                    <div class="grupo-form">
+                        <label for="correo">Correo Electrónico</label>
+                        <input type="email"
+                               id="correo"
+                               name="correo"
+                               required
+                               autocomplete="email"
+                               placeholder="ejemplo@correo.com">
+                    </div>
+                    <div class="grupo-form">
+                        <label for="contrasena">Contraseña</label>
+                        <input type="password"
+                               id="contrasena"
+                               name="contrasena"
+                               required
+                               autocomplete="current-password"
+                               placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-primario">Ingresar</button>
+                    <p class="auth-footer">
+                        ¿No tienes cuenta? <a href="{{ url_for("auth.registro") }}">Regístrate aquí</a>
+                    </p>
+                </form>
+            </main>
+        </div>
+    </body>
+</html>

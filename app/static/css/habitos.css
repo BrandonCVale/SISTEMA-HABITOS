@@ -1,0 +1,204 @@
+/* ==========================================================================
+   PÁGINA: GESTIÓN DE HÁBITOS (habitos.css)
+   Depende de pagina_principal.css para variables y layout base.
+   ========================================================================== */
+
+/* Filtros superiores */
+.management-filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.filter-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.filter-btn:hover {
+    color: var(--text-main);
+    background-color: var(--bg-hover);
+}
+
+.filter-btn.active {
+    color: var(--accent);
+    background-color: var(--accent-light); /* Asegúrate de tener esta variable en dashboard.css si no la tienes, usa #e8f5ed */
+}
+
+/* Grid de Tarjetas de Gestión */
+.habits-management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.management-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.management-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+}
+
+/* Cabecera de la tarjeta */
+.management-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.m-habit-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.m-habit-title h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-main);
+}
+
+.m-habit-freq {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Botones de acción (Editar/Eliminar) */
+.m-habit-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn svg { width: 18px; height: 18px; }
+
+.icon-btn.edit-btn:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-main);
+    border-color: var(--border-strong);
+}
+
+.icon-btn.delete-btn:hover {
+    background-color: #fef2f2;
+    color: #dc3545;
+    border-color: #f87171;
+}
+
+/* Cuerpo de la tarjeta (Días de la semana) */
+.freq-display {
+    display: flex;
+    gap: 6px;
+}
+
+.freq-pill {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.freq-pill.active {
+    background-color: var(--accent);
+    color: white;
+}
+
+.freq-pill.inactive {
+    background-color: var(--bg-hover);
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* Footer de la tarjeta (Estadísticas) */
+.management-card-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.stat-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+/* ==========================================================================
+   DISEÑO RESPONSIVO PARA GESTIÓN DE HÁBITOS
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Acomodamos los botones de filtros (Activos/Inactivos/Todos) */
+    .management-filters {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    .filter-btn { flex: 1; text-align: center; }
+
+    /* Acomodamos la información de cada tarjeta de hábito */
+    .management-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .m-habit-actions { width: 100%; justify-content: flex-start; }
+
+    .management-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .stat-mini {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

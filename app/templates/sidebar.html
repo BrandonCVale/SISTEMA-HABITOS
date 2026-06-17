@@ -1,0 +1,24 @@
+<!-- Columna fija a la izquierda de la pantalla -->
+<aside class="sidebar">
+    <div class="sidebar-top">
+        <div class="brand-logo">
+            <span class="logo-icon">🌿</span>
+            <span class="logo-text">Hábito.</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('pag_principal.inicio') }}" class="nav-item {% if request.endpoint == 'pag_principal.inicio' %}active{% endif %}"><i data-lucide="home"></i> Resumen</a>
+            <a href="{{ url_for('habitos.mis_habitos') }}" class="nav-item {% if request.endpoint != 'pag_principal.inicio' %}active{% endif %}"><i data-lucide="check-square"></i> Hábitos</a>
+        </nav>
+    </div>
+    <div class="sidebar-bottom">
+        <div class="user-profile">
+            <div class="avatar">
+                <div class="avatar-circle">{{ usuario.nombre_usuario[0] | upper if usuario.nombre_usuario else 'U' }}</div>
+            </div>
+            <div class="user-info">
+                <span class="user-name">{{ usuario.nombre_usuario | default("Usuario") }}</span>
+                <a href="{{ url_for('auth.cerrar_sesion') }}" class="link-logout">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</aside>
