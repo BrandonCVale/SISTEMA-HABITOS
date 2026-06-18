@@ -112,7 +112,7 @@ def visualizar_progreso(id_habito):
     from app.services.estadisticas_grafica import EstadisticasService
     grafica_html = EstadisticasService.generar_grafica_ultimos_dias(habito.registros)
 
-    # Servimos la interfaz enviando el HTML de la grafica
+    # Servimos la interfaz enviando el HTML de la gráfica
     return render_template('visualizar_progreso.html',
                            usuario=current_user,
                            habito=habito,

@@ -160,11 +160,39 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        <!--                        TIMER-->
+                        <!-- Cargar el script -->
+                        <script src="{{ url_for('static', filename='js/temporizador.js') }}" defer></script>
+                        <!-- Estructura visual del temporizador -->
+                        <div class="card calendar-card">
+                            <div class="card-header">
+                                <h3>Temporizador</h3>
+                            </div>
+                            <!-- Controles de ajuste de tiempo -->
+                            <div style="display: flex;
+                                        gap: 10px;
+                                        justify-content: center;
+                                        margin-bottom: 15px">
+                                <button id="restar-tiempo" class="btn-outline" style="width: 80px;">-5 Min</button>
+                                <button id="sumar-tiempo" class="btn-outline" style="width: 80px;">+5 Min</button>
+                            </div>
+                            <!-- Display del tiempo -->
+                            <div id="temporizador"
+                                 data-minutos="25"
+                                 style="font-size: 3rem;
+                                        font-weight: bold;
+                                        text-align: center;
+                                        margin: 20px 0">25:00</div>
+                            <!-- Controles principales -->
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button id="control-temporizador" class="btn-outline btn-accent">Iniciar</button>
+                                <button id="reiniciar-temporizador" class="btn-outline">Reiniciar</button>
+                            </div>
+                        </div>
                     </aside>
                 </div>
                 <!-- Invocamos nuestro componente de modal reutilizable -->
                 {% include 'modal_nuevo_habito.html' %}
-
                 <!-- FOOTER -->
                 <footer class="main-footer">
                     <p>&copy; 2026 Brandon Omar Castillo Valencia. Todos los derechos reservados.</p>

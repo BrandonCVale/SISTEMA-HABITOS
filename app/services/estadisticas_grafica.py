@@ -9,7 +9,7 @@ import plotly.express as px
 class EstadisticasService:
 
     @staticmethod
-    def generar_grafica_ultimos_dias(registros, dias=15):
+    def generar_grafica_ultimos_dias(registros, dias=30):
         """Genera una gráfica de barras mostrando el progreso de los últimos 'X' o '15' días."""
         hoy = date.today() # ej. yyyy-mm-dd
 
